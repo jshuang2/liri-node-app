@@ -6,7 +6,7 @@ var Spotify = require("node-spotify-api");
 var moment = require("moment");
 
 var spotify = new Spotify(keys.spotify);
-
+var movieURL = "http://www.omdbapi.com/?t=" + input + "&y=&plot=short&apikey=trilogy";
 var command = process.argv[2];
 
 if (process.argv.length > 3) {
@@ -36,7 +36,8 @@ function concertThis() {
 
     axios.get(queryURL).then(
         function(response) {
-            console.log(response.data);
+            // console.log(response.data);
+            formatConcertData(response.data);
         }
     )
     .catch(function (error) {
@@ -60,4 +61,78 @@ function concertThis() {
         }
         console.log(error.config);
       });
+};
+
+function spotifyThis() {
+    spotify.search({
+        type: "track",
+        query: input
+    }, 
+    function(err, data) {
+        if (err) {
+            console.log("Error occurred: " + err);
+        }
+        formatSpotifyData(data.tracks.items);
+    });
+}
+
+
+function formatConcertData(concertResponseData) {
+    for (i = 0; i < concertResponseData.length; i++) {
+        console.log("\n--------------------------------------------------------------\n");
+            console.log("Venue Name: " + concertResponseData[i].venue.name);
+            var location = concertResponseData[i].venue.city + ", " + concertResponseData[i].venue.region + ", " + concertResponseData[i].venue.country;
+            console.log("Venue Location: " + location);
+            console.log("Event Time: " + concertResponseData[i].datetime);
+    }
+    console.log("\n--------------------------------------------------------------");
+}
+
+function formatSpotifyData(spotifyResponseData) {
+    if (spotifyResponseData.length < 1) {
+        console.log("No results. Try again.");
+    }
+    else {
+        for (var i = 0; i < spotifyResponseData.length; i++) {
+            console.log("\n--------------------------------------------------------------\n");
+            console.log("Song Name: " + spotifyResponseData[i].name);
+            console.log("Artist: " + spotifyResponseData[i].artists[0].name);
+            console.log("Album: " + spotifyResponseData[i].album.name);
+            console.log("Preview Link: " + spotifyResponseData[i].preview_url);
+        }
+    console.log("\n--------------------------------------------------------------\n");
+    }
+}
+
+function movieThis() {
+    if (input === undefined) {
+        input = "Mr. Nobody";
+        movieThis();
+    }
+    else {
+        axios.get(movieURL).then(
+            function(response) {
+                console.log(response.data);
+            })
+            .catch(function(error) {
+                if (error.response) {
+                  // The request was made and the server responded with a status code
+                  // that falls out of the range of 2xx
+                  console.log("---------------Data---------------");
+                  console.log(error.response.data);
+                  console.log("---------------Status---------------");
+                  console.log(error.response.status);
+                  console.log("---------------Status---------------");
+                  console.log(error.response.headers);
+                } else if (error.request) {
+                  // The request was made but no response was received
+                  // `error.request` is an object that comes back with details pertaining to the error that occurred.
+                  console.log(error.request);
+                } else {
+                  // Something happened in setting up the request that triggered an Error
+                  console.log("Error", error.message);
+                }
+                console.log(error.config);
+              });
+    };
 };
