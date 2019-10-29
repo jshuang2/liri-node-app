@@ -6,7 +6,7 @@ var Spotify = require("node-spotify-api");
 var moment = require("moment");
 
 var spotify = new Spotify(keys.spotify);
-var movieURL = "http://www.omdbapi.com/?t=" + input + "&y=&plot=short&apikey=trilogy";
+
 var command = process.argv[2];
 
 if (process.argv.length > 3) {
@@ -74,7 +74,43 @@ function spotifyThis() {
         }
         formatSpotifyData(data.tracks.items);
     });
-}
+};
+
+function movieThis() {
+    var movieURL = "http://www.omdbapi.com/?t=" + input + "&y=&plot=short&apikey=trilogy";
+    
+    if (input === undefined) {
+        input = "Mr. Nobody";
+        movieThis();
+    }
+    else {
+        axios.get(movieURL).then(
+            function(response) {
+                // console.log(response.data);
+                formatMovieData(response.data);
+            })
+            .catch(function(error) {
+                if (error.response) {
+                  // The request was made and the server responded with a status code
+                  // that falls out of the range of 2xx
+                  console.log("---------------Data---------------");
+                  console.log(error.response.data);
+                  console.log("---------------Status---------------");
+                  console.log(error.response.status);
+                  console.log("---------------Status---------------");
+                  console.log(error.response.headers);
+                } else if (error.request) {
+                  // The request was made but no response was received
+                  // `error.request` is an object that comes back with details pertaining to the error that occurred.
+                  console.log(error.request);
+                } else {
+                  // Something happened in setting up the request that triggered an Error
+                  console.log("Error", error.message);
+                }
+                console.log(error.config);
+              });
+    };
+};
 
 
 function formatConcertData(concertResponseData) {
@@ -104,35 +140,28 @@ function formatSpotifyData(spotifyResponseData) {
     }
 }
 
-function movieThis() {
-    if (input === undefined) {
-        input = "Mr. Nobody";
-        movieThis();
+function formatMovieData(movieResponseData) {
+    /*  * Title of the movie.
+  * Year the movie came out.
+  * IMDB Rating of the movie.
+  * Rotten Tomatoes Rating of the movie.
+  * Country where the movie was produced.
+  * Language of the movie.
+  * Plot of the movie.
+  * Actors in the movie.*/
+    if (movieResponseData.length < 1) {
+        console.log("No results. Try again.");
     }
     else {
-        axios.get(movieURL).then(
-            function(response) {
-                console.log(response.data);
-            })
-            .catch(function(error) {
-                if (error.response) {
-                  // The request was made and the server responded with a status code
-                  // that falls out of the range of 2xx
-                  console.log("---------------Data---------------");
-                  console.log(error.response.data);
-                  console.log("---------------Status---------------");
-                  console.log(error.response.status);
-                  console.log("---------------Status---------------");
-                  console.log(error.response.headers);
-                } else if (error.request) {
-                  // The request was made but no response was received
-                  // `error.request` is an object that comes back with details pertaining to the error that occurred.
-                  console.log(error.request);
-                } else {
-                  // Something happened in setting up the request that triggered an Error
-                  console.log("Error", error.message);
-                }
-                console.log(error.config);
-              });
-    };
+        console.log("\n--------------------------------------------------------------\n");
+        console.log("Title: " + movieResponseData.Title);
+        console.log("Release Year: " + movieResponseData.Year);
+        console.log("IMDB Rating: " + movieResponseData.imdbRating);
+        console.log("Rotten Tomatoes Rating: " + movieResponseData.Ratings[1].Value);
+        console.log("Country Produced: " + movieResponseData.Country);
+        console.log("Language: " + movieResponseData.Language);
+        console.log("Plot: " + movieResponseData.Plot);
+        console.log("Actors: " + movieResponseData.Actors);
+    }
+    console.log("\n--------------------------------------------------------------\n");
 };
