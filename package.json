@@ -1,0 +1,20 @@
+{
+  "name": "liri-node-app",
+  "version": "1.0.0",
+  "description": "LIRI is just like SIRI for the iPhone. However, while SIRI operates via speech recognition, LIRI operates via language interpretation and recognition. LIRI is a command line interface (CLI) node application that utilizes multiple npm packages.",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/jshuang2/liri-node-app.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/jshuang2/liri-node-app/issues"
+  },
+  "homepage": "https://github.com/jshuang2/liri-node-app#readme"
+}
