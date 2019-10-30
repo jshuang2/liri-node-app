@@ -10,7 +10,7 @@ var spotify = new Spotify(keys.spotify);
 var command = process.argv[2];
 
 if (process.argv.length > 3) {
-    var input = process.argv.slice(3).join("");
+    var input = process.argv.slice(3).join(" ");
     console.log(input);
 }
 
@@ -114,12 +114,15 @@ function movieThis() {
 
 
 function formatConcertData(concertResponseData) {
+    
     for (i = 0; i < concertResponseData.length; i++) {
         console.log("\n--------------------------------------------------------------\n");
             console.log("Venue Name: " + concertResponseData[i].venue.name);
             var location = concertResponseData[i].venue.city + ", " + concertResponseData[i].venue.region + ", " + concertResponseData[i].venue.country;
             console.log("Venue Location: " + location);
-            console.log("Event Time: " + concertResponseData[i].datetime);
+            var formattedDate = concertResponseData[i].datetime;
+            formattedDate = moment(formattedDate).format("MM/DD/YYYY");
+            console.log("Event Time: " + formattedDate);
     }
     console.log("\n--------------------------------------------------------------");
 }
@@ -141,14 +144,6 @@ function formatSpotifyData(spotifyResponseData) {
 }
 
 function formatMovieData(movieResponseData) {
-    /*  * Title of the movie.
-  * Year the movie came out.
-  * IMDB Rating of the movie.
-  * Rotten Tomatoes Rating of the movie.
-  * Country where the movie was produced.
-  * Language of the movie.
-  * Plot of the movie.
-  * Actors in the movie.*/
     if (movieResponseData.length < 1) {
         console.log("No results. Try again.");
     }
