@@ -4,6 +4,7 @@ var keys = require("./keys.js");
 var axios = require("axios");
 var Spotify = require("node-spotify-api");
 var moment = require("moment");
+var fs = require("fs");
 
 var spotify = new Spotify(keys.spotify);
 
@@ -11,7 +12,6 @@ var command = process.argv[2];
 
 if (process.argv.length > 3) {
     var input = process.argv.slice(3).join(" ");
-    console.log(input);
 }
 
 switch (command) {
@@ -64,9 +64,14 @@ function concertThis() {
 };
 
 function spotifyThis() {
+    if (input === undefined) {
+        input = "The Sign Ace of Base";
+    }
+
     spotify.search({
         type: "track",
-        query: input
+        query: input,
+        limit: 5
     }, 
     function(err, data) {
         if (err) {
@@ -160,3 +165,36 @@ function formatMovieData(movieResponseData) {
     }
     console.log("\n--------------------------------------------------------------\n");
 };
+
+function doThis() {
+    fs.readFile("random.txt", "utf8", function(error, data) {
+        if (error) {
+            return console.log(error);
+        }
+        
+        var readFileData = data.split(",");
+        // console.log(readFileData);
+        
+        command = readFileData[0];
+        input = readFileData[1];
+        // console.log(command);
+        // console.log(input);
+        
+        switch (command) {
+            case "concert this":
+                concertThis();
+                break;
+            case "spotify-this-song":
+                spotifyThis();
+                break;
+            case "movie-this":
+                movieThis();
+                break;
+            default:
+                console.log("You have not entered a valid statement.");
+        }
+    })
+};
+
+// console.log(command);
+// console.log(input);
