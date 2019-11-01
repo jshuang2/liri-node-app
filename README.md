@@ -18,12 +18,16 @@ There are multiple commands that LIRI is able to process. It utilizes the above 
    * Name of venues for upcoming concerts
    * Venue location
    * Date of each event
+   * Example: 
+   ![concert-this screenshot](./images/concert-this-screenshot.PNG)
 
 2. By typing 'spotify-this-song *song*' into the CLI, LIRI is able to call the Spotify API and generate data for:
    * Artist(s)
    * The song's name
    * A preview link of the song from Spotify
    * The album that the song is from
+   * Example:
+   ![spotify-this-song screenshot](./images/spotify-this-song-screenshot.PNG)
 
 3. By typing 'movie-this *movie*' into the CLI, LIRI calls the OMDB API and outputs the below data:
    * Movie title
@@ -34,8 +38,13 @@ There are multiple commands that LIRI is able to process. It utilizes the above 
    * Language of the movie
    * Plot of the movie
    * Actors in the movie
+   * Example:
+   ![movie-this screenshot](./images/movie-this-screenshot.PNG)
 
 4. By typing 'do-what-it-says' into the CLI, LIRI will read the text in the file called random.txt located in the same directory and output data accordingly based on what the text tells it to do.
+   * Example:
+   ![random.txt screenshot](./images/text-in-txt-file-screenshot.PNG)
+   ![do-what-it-says screenshot](./images/do-what-it-says-screenshot.PNG)
 
 <br>
 
